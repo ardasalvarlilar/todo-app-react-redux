@@ -1,23 +1,30 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { getTodo } from '../redux/todoSlice'
+import {deleteTodo,checkTodo } from '../redux/listSlice'
 
-export default function Results({list,setList}){
 
-  function deleteTodo(index){
-    let newList = [...list]
-    newList.splice(index,1)
-    setList(newList)
+export default function Results(){
+  const list = useSelector(state => state.list)
+  const dispatch = useDispatch()
+
+
+
+  function deleteTodoFunction(index){
+    dispatch(deleteTodo(index))
   }
 
-  function checkTodo(index){
-    let newList = [...list]
-    if(newList[index].isCompleted){
-      newList[index].isCompleted = false
-    }else{
-      newList[index].isCompleted = true
-    }
-    setList(newList)
+  function checkTodoFunction(index){
+    dispatch(checkTodo(index))
   }
+
+  // function checkTodo(index){
+  //   let newList = [...list]
+  //   if(newList[index].isCompleted){
+  //     newList[index].isCompleted = false
+  //   }else{
+  //     newList[index].isCompleted = true
+  //   }
+  //   setList(newList)
+  // }
 
   return(
     <ul className='mt-10 flex flex-col gap-5'>
@@ -30,11 +37,11 @@ export default function Results({list,setList}){
           <div className='flex gap-3'>
             <i 
               className={`fas fa-check fa-xl text-slate-800 dark:text-white cursor-pointer hover:text-slate-500`}
-              onClick={() => checkTodo(index)}
+              onClick={() => checkTodoFunction(index)}
             ></i>
             <i 
               className='fas fa-x fa-xl text-slate-800 dark:text-white cursor-pointer hover:text-slate-500'
-              onClick={() => deleteTodo(index)}
+              onClick={() => deleteTodoFunction(index)}
             ></i>
           </div>
         </li>

@@ -1,25 +1,34 @@
 import { useRef } from 'react'
 import Results from './Results'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTodo } from '../redux/todoSlice'
+import { getTodo} from '../redux/todoSlice'
+import { pushList as pushListAction  } from '../redux/listSlice'
 
 
-export default function Inputs({setList,list}) {
+export default function Inputs() {
   const inputRef = useRef()
-  const {isCompleted,text} = useSelector((state) => state.todo)
+  const todo = useSelector((state) => state.todo)
+  // const list = useSelector(state => state.list)
+  // console.log(list)
+
   const dispatch = useDispatch()
+
+
   function getInputValue(e){
     dispatch(getTodo(inputRef.current.value))
-
+    
     if(e.code === 'Enter'){
-      pushList()
+      dispatch(pushListAction(todo))
+      inputRef.current.value = ''
     }
   }
-
-  function pushList(){
-    setList(prevList => [...prevList,{isCompleted,text}])
+  
+  function handleClick(){
+    dispatch(pushListAction(todo))
     inputRef.current.value = ''
   }
+
+  
   return (
     <div className=' w-full md:w-8/12 mx-auto'>
       <input
@@ -30,10 +39,10 @@ export default function Inputs({setList,list}) {
       />
       <button 
         className=' w-auto px-6 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white border border-slate-800 dark:border-white rounded-lg hover:bg-slate-800 hover:text-white hover:border-white hover:dark:bg-white hover:dark:text-slate-800'
-        onClick={() => pushList()}
+        onClick={handleClick}
       >Todo ekle</button>
 
-      <Results list={list} setList={setList}/>
+      <Results/>
     </div>
   )
 }
